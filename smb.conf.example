@@ -1,0 +1,183 @@
+# Configuration Samba pour Raspberry Pi 5 NAS
+# Ce fichier doit être ajouté à /etc/samba/smb.conf
+# 
+# Installation :
+# 1. Sauvegarder la configuration originale : sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.backup
+# 2. Copier ce contenu dans /etc/samba/smb.conf
+# 3. Adapter les chemins selon votre configuration
+# 4. Tester avec : testparm
+# 5. Redémarrer Samba : sudo systemctl restart smbd nmbd
+
+#======================= Section Globale =======================
+
+[global]
+   # Nom du groupe de travail
+   workgroup = WORKGROUP
+   
+   # Description du serveur
+   server string = Raspberry Pi 5 NAS Server
+   
+   # Nom NetBIOS
+   netbios name = raspinas
+   
+   # Mode de sécurité
+   security = user
+   
+   # Autoriser les utilisateurs invités pour les erreurs d'authentification
+   map to guest = bad user
+   
+   # Désactiver le proxy DNS
+   dns proxy = no
+   
+   # Niveau de log (0 = minimal, 3 = debug)
+   log level = 1
+   log file = /var/log/samba/log.%m
+   max log size = 1000
+   
+   # Optimisations de performance
+   # Note : socket options est déprécié dans Samba 4.x+ (géré automatiquement)
+   # Décommenter uniquement si vous utilisez Samba 3.x
+   # socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=524288 SO_SNDBUF=524288
+   read raw = yes
+   write raw = yes
+   max xmit = 65535
+   dead time = 15
+   getwd cache = yes
+   
+   # Utiliser sendfile pour de meilleures performances
+   use sendfile = true
+   min receivefile size = 16384
+   
+   # Optimisations I/O asynchrones
+   aio read size = 16384
+   aio write size = 16384
+   
+   # Activer le recyclage (corbeille)
+   # Décommentez pour activer
+   # vfs objects = recycle
+   # recycle:repository = .recycle
+   # recycle:keeptree = yes
+   # recycle:versions = yes
+
+#======================= Partages =======================
+
+# Partage PUBLIC - Accessible sans authentification
+# AVERTISSEMENT : Ce partage utilise des permissions très ouvertes (0777)
+# Adapté pour un usage domestique uniquement. Pour un usage professionnel,
+# utilisez des permissions plus restrictives (0755) et l'authentification.
+[Partage]
+   comment = Partage public pour tous
+   path = /mnt/nas/partage
+   browseable = yes
+   writable = yes
+   guest ok = yes
+   read only = no
+   create mask = 0777
+   directory mask = 0777
+   force user = nobody
+   force group = nogroup
+   
+   # Activer le verrouillage de fichiers
+   locking = yes
+   strict locking = no
+   oplocks = yes
+   level2 oplocks = yes
+
+# Partage PRIVÉ - Nécessite authentification
+[Private]
+   comment = Partage privé sécurisé
+   path = /mnt/nas/private
+   browseable = yes
+   writable = yes
+   guest ok = no
+   read only = no
+   valid users = @users
+   create mask = 0770
+   directory mask = 0770
+   force group = users
+   
+   # Sécurité renforcée
+   locking = yes
+   strict locking = auto
+
+# Partage UTILISATEUR - Dossier personnel de chaque utilisateur
+# Décommentez pour activer
+# [homes]
+#    comment = Dossiers personnels des utilisateurs
+#    browseable = no
+#    writable = yes
+#    valid users = %S
+#    create mask = 0700
+#    directory mask = 0700
+
+# Partage MULTIMEDIA - Optimisé pour les médias
+# Décommentez et adaptez pour activer
+# [Media]
+#    comment = Partage multimédia (vidéos, musique, photos)
+#    path = /mnt/nas/media
+#    browseable = yes
+#    writable = yes
+#    guest ok = yes
+#    read only = no
+#    create mask = 0775
+#    directory mask = 0775
+#    force user = pi
+#    
+#    # Optimisations pour les fichiers volumineux
+#    strict allocate = yes
+#    allocation roundup size = 4096
+
+# Partage BACKUP - Pour les sauvegardes
+# Décommentez et adaptez pour activer
+# [Backup]
+#    comment = Dossier de sauvegarde
+#    path = /mnt/nas/backup
+#    browseable = yes
+#    writable = yes
+#    guest ok = no
+#    valid users = @users
+#    read only = no
+#    create mask = 0770
+#    directory mask = 0770
+#    
+#    # Activer le versionnement
+#    vfs objects = shadow_copy2
+#    shadow:snapdir = .snapshots
+#    shadow:sort = desc
+
+# Partage IMPRIMANTE - Si vous avez une imprimante USB
+# Décommentez pour activer
+# [printers]
+#    comment = Toutes les imprimantes
+#    browseable = no
+#    path = /var/spool/samba
+#    printable = yes
+#    guest ok = yes
+#    read only = yes
+#    create mask = 0700
+
+#======================= Notes =======================
+#
+# Après modification de ce fichier :
+# 1. Tester la configuration : testparm
+# 2. Créer les dossiers nécessaires :
+#    sudo mkdir -p /mnt/nas/partage /mnt/nas/private
+# 3. Définir les permissions :
+#    sudo chown -R nobody:nogroup /mnt/nas/partage
+#    sudo chmod -R 0777 /mnt/nas/partage
+#    sudo chown -R root:users /mnt/nas/private
+#    sudo chmod -R 0770 /mnt/nas/private
+# 4. Redémarrer Samba :
+#    sudo systemctl restart smbd nmbd
+# 5. Vérifier le statut :
+#    sudo systemctl status smbd nmbd
+#
+# Pour ajouter un utilisateur :
+#    sudo adduser nom_utilisateur
+#    sudo usermod -aG users nom_utilisateur
+#    sudo smbpasswd -a nom_utilisateur
+#
+# Pour tester l'accès :
+#    Windows : \\raspinas\Partage
+#    macOS   : smb://raspinas/Partage
+#    Linux   : smb://raspinas/Partage
