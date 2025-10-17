@@ -35,7 +35,9 @@
    max log size = 1000
    
    # Optimisations de performance
-   socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=524288 SO_SNDBUF=524288
+   # Note : socket options est déprécié dans Samba 4.x+ (géré automatiquement)
+   # Décommenter uniquement si vous utilisez Samba 3.x
+   # socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=524288 SO_SNDBUF=524288
    read raw = yes
    write raw = yes
    max xmit = 65535
@@ -60,6 +62,9 @@
 #======================= Partages =======================
 
 # Partage PUBLIC - Accessible sans authentification
+# AVERTISSEMENT : Ce partage utilise des permissions très ouvertes (0777)
+# Adapté pour un usage domestique uniquement. Pour un usage professionnel,
+# utilisez des permissions plus restrictives (0755) et l'authentification.
 [Partage]
    comment = Partage public pour tous
    path = /mnt/nas/partage

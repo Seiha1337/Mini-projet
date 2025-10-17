@@ -438,11 +438,16 @@ Vous disposez maintenant d'un serveur NAS fonctionnel basé sur Samba sur votre 
 
 ### Recommandations
 
-- **Sécurité** : Utilisez toujours des mots de passe forts pour les utilisateurs Samba
+- **Sécurité** : 
+  - Utilisez toujours des mots de passe forts pour les utilisateurs Samba
+  - Les permissions 0777 dans les exemples sont adaptées pour un usage domestique uniquement
+  - Pour un environnement professionnel, utilisez des permissions plus restrictives (0755)
+  - Ne jamais exposer le serveur NAS directement sur Internet sans VPN
 - **Sauvegardes** : Mettez en place une stratégie de sauvegarde régulière
 - **Mises à jour** : Maintenez votre système à jour avec `sudo apt update && sudo apt upgrade`
 - **Surveillance** : Surveillez régulièrement les performances et les logs
 - **Refroidissement** : Assurez-vous que le Raspberry Pi reste à une température acceptable
+- **Réseau** : Utilisez une connexion Ethernet pour de meilleures performances et fiabilité
 
 ## Ressources
 

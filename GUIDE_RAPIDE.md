@@ -53,9 +53,11 @@ sudo systemctl enable smbd nmbd
 ```
 
 ### Étape 6 : Tester l'accès
-Sur Windows : `\\IP_DU_RASPBERRY\Partage`  
-Sur macOS : `smb://IP_DU_RASPBERRY/Partage`  
-Sur Linux : `smb://IP_DU_RASPBERRY/Partage`
+Sur Windows : `\\raspinas\Partage` ou `\\192.168.1.100\Partage`  
+Sur macOS : `smb://raspinas/Partage` ou `smb://192.168.1.100/Partage`  
+Sur Linux : `smb://raspinas/Partage` ou `smb://192.168.1.100/Partage`
+
+(Remplacer 192.168.1.100 par l'IP de votre Raspberry Pi)
 
 ## Commandes utiles
 

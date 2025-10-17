@@ -6,6 +6,9 @@
 # Usage: sudo ./diagnostics.sh
 #
 
+# Strict error handling
+set -euo pipefail
+
 # Couleurs pour l'affichage
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -160,9 +163,10 @@ print_header "8. Dossiers de Partage"
 
 # Rechercher les chemins dans smb.conf
 if [ -f /etc/samba/smb.conf ]; then
-    SHARE_PATHS=$(grep "path = " /etc/samba/smb.conf | awk '{print $3}')
+    # Utiliser un tableau pour gérer correctement les chemins avec espaces
+    mapfile -t SHARE_PATHS < <(grep "path = " /etc/samba/smb.conf | awk '{print $3}')
     
-    for path in $SHARE_PATHS; do
+    for path in "${SHARE_PATHS[@]}"; do
         if [ -d "$path" ]; then
             print_success "Dossier existe : $path"
             ls -ld "$path"
