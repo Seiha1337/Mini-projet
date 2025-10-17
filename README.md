@@ -4,6 +4,18 @@
 
 Ce mini-projet décrit l'installation et la configuration d'un serveur NAS (Network Attached Storage) utilisant Samba sur un Raspberry Pi 5. Samba permet de partager des fichiers et des dossiers sur un réseau local, rendant le Raspberry Pi accessible depuis des ordinateurs Windows, macOS et Linux.
 
+## 📚 Documentation disponible
+
+Ce projet contient plusieurs documents pour vous accompagner :
+
+- **[README.md](README.md)** (ce fichier) : Guide complet et détaillé avec toutes les étapes
+- **[GUIDE_RAPIDE.md](GUIDE_RAPIDE.md)** : Installation rapide en 10 minutes
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** : Architecture système avec diagrammes détaillés
+- **[smb.conf.example](smb.conf.example)** : Fichier de configuration Samba commenté et prêt à l'emploi
+- **[diagnostics.sh](diagnostics.sh)** : Script de diagnostic automatisé pour dépannage
+
+> **💡 Débutant ?** Commencez par le [GUIDE_RAPIDE.md](GUIDE_RAPIDE.md) puis revenez à ce document pour les détails.
+
 ## Table des matières
 
 1. [Prérequis](#prérequis)
@@ -449,14 +461,50 @@ Vous disposez maintenant d'un serveur NAS fonctionnel basé sur Samba sur votre 
 - **Refroidissement** : Assurez-vous que le Raspberry Pi reste à une température acceptable
 - **Réseau** : Utilisez une connexion Ethernet pour de meilleures performances et fiabilité
 
+## Aller plus loin
+
+### Documents complémentaires de ce projet
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** : Comprendre en profondeur l'architecture du système
+  - Diagrammes de flux de données
+  - Gestion de la sécurité multi-niveaux
+  - Analyse des performances
+  - Plans d'évolution du système
+
+- **[diagnostics.sh](diagnostics.sh)** : Utiliser l'outil de diagnostic
+  ```bash
+  sudo ./diagnostics.sh
+  ```
+  Ce script vérifie automatiquement l'état du système et identifie les problèmes
+
+### Extensions possibles
+
+Une fois votre NAS opérationnel, vous pouvez envisager :
+- **Accès distant sécurisé** via VPN (WireGuard, OpenVPN)
+- **Serveur multimédia** (Plex, Jellyfin, Kodi)
+- **Synchronisation cloud** (Nextcloud, Syncthing)
+- **Conteneurisation** (Docker avec Portainer)
+- **Monitoring avancé** (Grafana, Prometheus)
+- **Sauvegarde automatisée** (rsync, restic)
+
 ## Ressources
 
 - [Documentation officielle Samba](https://www.samba.org/samba/docs/)
 - [Documentation Raspberry Pi](https://www.raspberrypi.org/documentation/)
 - [Forum Raspberry Pi](https://forums.raspberrypi.com/)
+- [Samba Wiki](https://wiki.samba.org/)
+
+## Support et contribution
+
+Si vous rencontrez des problèmes ou souhaitez améliorer ce projet :
+1. Utilisez d'abord le script `diagnostics.sh` pour identifier le problème
+2. Consultez la section [Dépannage](#dépannage)
+3. Vérifiez l'[ARCHITECTURE.md](ARCHITECTURE.md) pour comprendre le fonctionnement
+4. Recherchez dans les issues GitHub du projet
 
 ---
 
 **Auteur** : Seiha1337  
 **Date** : Octobre 2025  
-**Raspberry Pi** : Modèle 5
+**Raspberry Pi** : Modèle 5  
+**Version documentation** : 1.0
